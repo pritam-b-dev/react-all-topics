@@ -1,9 +1,33 @@
-function App() {
+function Square({ value }) {
   return (
     <>
-      <h1 className="text-3xl font-bold underline">hello world</h1>
+      <button className="bg-white text-2xl m-1 p-1 border border-gray-400 h-12 w-12 leading-9">
+        {value}
+      </button>
     </>
   );
 }
 
-export default App;
+function Board() {
+  return (
+    <>
+      <div>
+        <Square value="1" />
+        <Square value="2" />
+        <Square value="3" />
+      </div>
+      <div>
+        <Square value="4" />
+        <Square value="5" />
+        <Square value="6" />
+      </div>
+      <div>
+        <Square value="7" />
+        <Square value="8" />
+        <Square value="9" />
+      </div>
+    </>
+  );
+}
+
+export default Board;
