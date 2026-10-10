@@ -65,16 +65,38 @@ function Board({ xIsNext, square, onPlay }) {
 function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [xIsNext, setXIsNext] = useState(true);
+  const [currentMove, setCurrentMove] = useState(0);
 
-  const currentSqures = history[history.length - 1];
+  const currentSqures = history[currentMove];
   {
     /* currentSqures হলো প্লেয়ারদের সর্বশেষ পদক্ষেপ এর পরে আমাদের হিস্টোরি নামক এরে-অফ-এরে তে সর্বশেষ ইন্ডেক্সে জমা হওয়া নতুন এরে। */
   }
 
   function handlePlay(nextSquare) {
     setXIsNext(!xIsNext);
-    setHistory([...history, nextSquare]);
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquare];
+    setHistory(nextHistory);
+    setCurrentMove(nextHistory.length - 1);
   }
+
+  function jumpTo(move) {
+    setCurrentMove(move);
+    setXIsNext(move % 2 === 0);
+  }
+
+  const moves = history.map((square, move) => {
+    let description;
+    if (move > 0) {
+      description = `Go to the move No. ${move}`;
+    } else {
+      description = `star the game`;
+    }
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
 
   return (
     <>
@@ -82,7 +104,7 @@ function Game() {
         <Board xIsNext={xIsNext} square={currentSqures} onPlay={handlePlay} />
       </div>
       <div>
-        <ol></ol>
+        <ol>{moves}</ol>
       </div>
     </>
   );
