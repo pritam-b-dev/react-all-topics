@@ -13,10 +13,7 @@ function Square({ value, onSquareClick }) {
   );
 }
 
-function Board() {
-  const [square, setSquare] = useState(Array(9).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
-
+function Board({ xIsNext, square, onPlay }) {
   const winner = calculateWinner(square);
   let status;
   if (winner) {
@@ -36,8 +33,7 @@ function Board() {
     } else {
       newSquare[i] = "O";
     }
-    setSquare(newSquare);
-    setXIsNext(!xIsNext);
+    onPlay(newSquare);
   }
   return (
     <>
@@ -65,6 +61,33 @@ function Board() {
     </>
   );
 }
+
+function Game() {
+  const [history, setHistory] = useState([Array(9).fill(null)]);
+  const [xIsNext, setXIsNext] = useState(true);
+
+  const currentSqures = history[history.length - 1];
+  {
+    /* currentSqures হলো প্লেয়ারদের সর্বশেষ পদক্ষেপ এর পরে আমাদের হিস্টোরি নামক এরে-অফ-এরে তে সর্বশেষ ইন্ডেক্সে জমা হওয়া নতুন এরে। */
+  }
+
+  function handlePlay(nextSquare) {
+    setXIsNext(!xIsNext);
+    setHistory([...history, nextSquare]);
+  }
+
+  return (
+    <>
+      <div>
+        <Board xIsNext={xIsNext} square={currentSqures} onPlay={handlePlay} />
+      </div>
+      <div>
+        <ol></ol>
+      </div>
+    </>
+  );
+}
+
 function calculateWinner(square) {
   const lines = [
     [0, 1, 2],
@@ -85,4 +108,4 @@ function calculateWinner(square) {
   return null;
 }
 
-export default Board;
+export default Game;
